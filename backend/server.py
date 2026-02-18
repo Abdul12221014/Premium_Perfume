@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import List, Optional
 import uuid
 from datetime import datetime, timezone
+import stripe
 
 
 ROOT_DIR = Path(__file__).parent
@@ -17,6 +18,8 @@ load_dotenv(ROOT_DIR / '.env')
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
+
+stripe.api_key = os.environ.get('STRIPE_SECRET_KEY', 'sk_test_51QY9xTRscTfWlEm8hC9VDhjwFU4aKSHzCl9zpqHNuY8gGzMMloPaD8RxIaB5GQ4FxPm8jREVm2pIE5bBJG3KEDJz00QL3Hxnxi')
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
