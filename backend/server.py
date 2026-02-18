@@ -61,6 +61,7 @@ class Fragrance(BaseModel):
     slug: str
     description: str
     price: str
+    price_amount: int
     notes_top: List[str]
     notes_heart: List[str]
     notes_base: List[str]
@@ -69,6 +70,10 @@ class Fragrance(BaseModel):
     craft: str
     image_url: str
     batch_number: Optional[str] = None
+
+
+class CheckoutSessionCreate(BaseModel):
+    fragrance_slug: str
 
 
 @api_router.get("/")
