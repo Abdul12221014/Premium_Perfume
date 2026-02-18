@@ -1,0 +1,177 @@
+{
+  "brand_identity": {
+    "name": "ARAR Parfums",
+    "pronunciation": "ah-RAHR",
+    "tagline_primary": "Identity, Distilled.",
+    "tagline_secondary": "A presence you do not announce. A memory that remains.",
+    "positioning": "Ultra-luxury, quiet luxury, aristocratic restraint",
+    "tone": "Calm, Controlled, Confident, Minimal, Poetic",
+    "audience": "High-net-worth individuals, 25-55"
+  },
+  "design_system": {
+    "typography": {
+      "headings": {
+        "family": "Playfair Display",
+        "weights": ["400", "500", "600"],
+        "usage": "All section titles, hero text, product names. Use tracking-tight (-0.02em) for larger sizes.",
+        "scale": {
+          "hero": "text-5xl md:text-7xl lg:text-9xl",
+          "h1": "text-4xl md:text-6xl",
+          "h2": "text-3xl md:text-5xl",
+          "h3": "text-2xl md:text-3xl"
+        }
+      },
+      "body": {
+        "family": "Montserrat",
+        "weights": ["300", "400", "500"],
+        "usage": "Descriptions, navigation, functional text. Use tracking-wide (0.05em) for small caps labels.",
+        "scale": {
+          "lead": "text-lg md:text-xl font-light leading-relaxed",
+          "base": "text-base font-light leading-loose",
+          "small": "text-sm font-medium tracking-widest uppercase",
+          "micro": "text-xs tracking-[0.2em] uppercase"
+        }
+      }
+    },
+    "colors": {
+      "palette": {
+        "charcoal": "#0F0E0D",
+        "linen": "#F4F1EA",
+        "bronze": "#BFA46D",
+        "obsidian": "#050505",
+        "stone": "#1a1a1a"
+      },
+      "usage": {
+        "background_primary": "#0F0E0D",
+        "background_secondary": "#050505",
+        "text_primary": "#F4F1EA",
+        "text_secondary": "#BFA46D",
+        "text_muted": "rgba(244, 241, 234, 0.6)",
+        "border_subtle": "rgba(191, 164, 109, 0.2)",
+        "accent_glow": "rgba(191, 164, 109, 0.1)"
+      }
+    },
+    "spacing": {
+      "container": "max-w-[1800px] mx-auto px-6 md:px-12",
+      "section_gap": "py-24 md:py-40 lg:py-56",
+      "element_gap": "gap-8 md:gap-16 lg:gap-24"
+    },
+    "borders": {
+      "radius": "rounded-none",
+      "width": "border-[0.5px]",
+      "style": "solid"
+    },
+    "motion": {
+      "duration": "duration-700",
+      "ease": "ease-out",
+      "fade_in": "opacity-0 animate-fade-in forwards",
+      "no_bounce": "true",
+      "scroll_behavior": "smooth"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-transparent text-linen border border-bronze/40 px-8 py-4 hover:bg-bronze hover:text-charcoal transition-colors duration-500 uppercase tracking-widest text-xs font-medium rounded-none",
+      "secondary": "text-bronze underline decoration-bronze/30 underline-offset-8 hover:decoration-bronze transition-all duration-500 uppercase tracking-widest text-xs",
+      "text": "text-linen/70 hover:text-linen transition-colors duration-300 uppercase tracking-widest text-xs"
+    },
+    "cards": {
+      "style": "bg-transparent border border-white/5 hover:border-bronze/30 transition-colors duration-700 p-8 or p-12",
+      "hover": "no-scale",
+      "image_style": "aspect-[3/4] object-cover filter brightness-[0.8] contrast-[1.1] grayscale-[0.2]"
+    },
+    "inputs": {
+      "style": "bg-transparent border-b border-white/20 px-0 py-4 text-linen placeholder:text-white/20 focus:outline-none focus:border-bronze transition-colors duration-500 rounded-none w-full font-light"
+    },
+    "navigation": {
+      "style": "fixed top-0 w-full z-50 mix-blend-difference text-linen py-6 px-12 flex justify-between items-center backdrop-blur-sm bg-black/5"
+    }
+  },
+  "layouts": {
+    "grid_strategy": "Asymmetric Bento Grid (Mode A)",
+    "hero_section": "Full screen (h-screen), centered text or bottom-left aligned, cinematic background video/image",
+    "product_grid": "Staggered layout, not uniform rows. Some items larger than others.",
+    "text_block": "Narrow columns for readability (max-w-xl), generous leading."
+  },
+  "visual_enhancers": {
+    "textures": "Grain overlay (opacity 0.05), Subtle gradient mesh in background corners",
+    "lighting": "Spotlight effect on products, dark vignetting",
+    "glassmorphism": "Not used heavily. Prefer solid or fully transparent with blur.",
+    "lines": "Very thin (1px) vertical lines running through the page to create structure."
+  },
+  "assets": {
+    "images": {
+      "hero_background": "https://images.unsplash.com/photo-1586343785368-997d31ba8099?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1Mjh8MHwxfHNlYXJjaHwzfHxkYXJrJTIwdGV4dHVyZSUyMHdvb2QlMjBzaWxrJTIwc3RvbmUlMjBsdXh1cnklMjBhYnN0cmFjdCUyMGJhY2tncm91bmR8ZW58MHx8fHwxNzcxNDU1MDMxfDA&ixlib=rb-4.1.0&q=85",
+      "perfume_hero_1": "https://images.unsplash.com/photo-1701056035604-6a7dd0efa0d7?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MDV8MHwxfHNlYXJjaHw0fHxsdXh1cnklMjBkYXJrJTIwcGVyZnVtZSUyMGJvdHRsZSUyMGNpbmVtYXRpYyUyMGxpZ2h0aW5nJTIwbWluaW1hbCUyMGJsYWNrJTIwYmFja2dyb3VuZHxlbnwwfHx8fDE3NzE0NTUwMjl8MA&ixlib=rb-4.1.0&q=85",
+      "perfume_collection_1": "https://images.unsplash.com/photo-1725139695447-f75e1b482708?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MDV8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBkYXJrJTIwcGVyZnVtZSUyMGJvdHRsZSUyMGNpbmVtYXRpYyUyMGxpZ2h0aW5nJTIwbWluaW1hbCUyMGJsYWNrJTIwYmFja2dyb3VuZHxlbnwwfHx8fDE3NzE0NTUwMjl8MA&ixlib=rb-4.1.0&q=85",
+      "perfume_collection_2": "https://images.pexels.com/photos/11122042/pexels-photo-11122042.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "perfume_collection_3": "https://images.unsplash.com/photo-1698793916137-30f994d15133?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MDV8MHwxfHNlYXJjaHwzfHxsdXh1cnklMjBkYXJrJTIwcGVyZnVtZSUyMGJvdHRsZSUyMGNpbmVtYXRpYyUyMGxpZ2h0aW5nJTIwbWluaW1hbCUyMGJsYWNrJTIwYmFja2dyb3VuZHxlbnwwfHx8fDE3NzE0NTUwMjl8MA&ixlib=rb-4.1.0&q=85",
+      "craft_atelier": "https://images.unsplash.com/photo-1709294993903-f6d8ef544e55?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2OTV8MHwxfHNlYXJjaHwyfHxwZXJmdW1lciUyMGJsZW5kaW5nJTIwaW5ncmVkaWVudHMlMjBkYXJrJTIwbGFib3JhdG9yeSUyMGNpbmVtYXRpYyUyMGFlc3RoZXRpY3xlbnwwfHx8fDE3NzE0NTUwMzJ8MA&ixlib=rb-4.1.0&q=85",
+      "texture_wood": "https://images.unsplash.com/photo-1748113738327-878482a6e3d3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1Mjh8MHwxfHNlYXJjaHwxfHxkYXJrJTIwdGV4dHVyZSUyMHdvb2QlMjBzaWxrJTIwc3RvbmUlMjBsdXh1cnklMjBhYnN0cmFjdCUyMGJhY2tncm91bmR8ZW58MHx8fHwxNzcxNDU1MDMxfDA&ixlib=rb-4.1.0&q=85",
+      "texture_stone": "https://images.unsplash.com/photo-1706095883120-ab0bd73faee6?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1Mjh8MHwxfHNlYXJjaHwyfHxkYXJrJTIwdGV4dHVyZSUyMHdvb2QlMjBzaWxrJTIwc3RvbmUlMjBsdXh1cnklMjBhYnN0cmFjdCUyMGJhY2tncm91bmR8ZW58MHx8fHwxNzcxNDU1MDMxfDA&ixlib=rb-4.1.0&q=85"
+    },
+    "icons": "Use Lucide React with stroke-width={1}. Very thin icons."
+  },
+  "content_strategy": {
+    "fragrances": [
+      {
+        "name": "ECLIPSE NOIR",
+        "description": "A shadow caught in amber. The scent of dusk in an ancient library.",
+        "price": "$380",
+        "notes": "Black Truffle, Oud, Vintage Leather"
+      },
+      {
+        "name": "SILENT VOW",
+        "description": "A promise whispered in a cathedral. Incense and cold stone.",
+        "price": "$420",
+        "notes": "Frankincense, Myrrh, White Lily"
+      },
+      {
+        "name": "IRON & SILK",
+        "description": "The contrast of power and grace. Cold metal against warm skin.",
+        "price": "$450",
+        "notes": "Metallic Aldehydes, Damascus Rose, Civet"
+      },
+      {
+        "name": "VELVET ASH",
+        "description": "The memory of a fire long extinguished. Comforting and ghostly.",
+        "price": "$390",
+        "notes": "Burnt Cedar, Vanilla Absolute, Grey Musk"
+      },
+      {
+        "name": "MIDNIGHT SOVEREIGN",
+        "description": "Rule without speaking. A dark crown of spices.",
+        "price": "$480",
+        "notes": "Saffron, Black Pepper, Royal Amber"
+      }
+    ]
+  },
+  "instructions_to_main_agent": [
+    "IMPERATIVE: Do not use default Tailwind colors. Use the specific hex codes provided.",
+    "IMPERATIVE: Do not create 'commercial' layouts. No grids of 4 equal cards.",
+    "IMPERATIVE: Use 'Playfair Display' for ALL headings. Import it from Google Fonts.",
+    "IMPERATIVE: Use 'Montserrat' for body text. Import it from Google Fonts.",
+    "IMPERATIVE: Ensure all backgrounds are dark (#0F0E0D or #050505). Text is Linen (#F4F1EA).",
+    "IMPERATIVE: Navigation must be transparent and minimal. Just logo and text links.",
+    "IMPERATIVE: Product pages should feel like a magazine editorial, not an Amazon page.",
+    "IMPERATIVE: No 'Add to Cart' buttons. Use 'Acquire' or 'Inquire'.",
+    "IMPERATIVE: Animations must be slow (700ms+). Fade ins only.",
+    "IMPERATIVE: Create a 'Journal' or 'Atelier' section that looks like text-heavy editorial.",
+    "IMPERATIVE: Use the image URLs provided for specific sections.",
+    "IMPERATIVE: Add `data-testid` to all interactive elements."
+  ],
+  "universal_guidelines": [
+    "Don't make generic centered layouts, simplistic gradients, and uniform styling.",
+    "Create depth through layered design elements with z-index hierarchy.",
+    "Use glass-morphism effects with backdrop filters (12-24px blur).",
+    "You MUST NOT apply universal transition. Eg: transition: all.",
+    "You MUST NOT center align the app container.",
+    "Always use modern button styles like pill-shaped (OR SHARP for this brand), or sharp button with interaction animations.",
+    "NEVER: use AI assistant Emoji characters.",
+    "Every interaction needs micro-animations - hover states, transitions.",
+    "Use 2-3x more spacing than feels comfortable.",
+    "Subtle grain textures, noise overlays, custom cursors.",
+    "Use sonner for toasts.",
+    "Components MUST use named exports."
+  ]
+}
