@@ -22,6 +22,9 @@ export const Footer = () => {
               <Link to="/atelier" data-testid="footer-atelier" className="body-font text-xs text-[#F4F1EA]/60 hover:text-[#F4F1EA] transition-colors duration-500">
                 Atelier
               </Link>
+              <Link to="/journal" data-testid="footer-journal" className="body-font text-xs text-[#F4F1EA]/60 hover:text-[#F4F1EA] transition-colors duration-500">
+                Journal
+              </Link>
               <Link to="/" data-testid="footer-collections" className="body-font text-xs text-[#F4F1EA]/60 hover:text-[#F4F1EA] transition-colors duration-500">
                 Collections
               </Link>
