@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
+import { toast } from "sonner";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -9,6 +10,7 @@ export const ProductDetailPage = () => {
   const { slug } = useParams();
   const [fragrance, setFragrance] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   useEffect(() => {
     fetchFragrance();
@@ -22,6 +24,25 @@ export const ProductDetailPage = () => {
       console.error("Error fetching fragrance:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAcquire = async () => {
+    if (checkoutLoading) return;
+    
+    setCheckoutLoading(true);
+    try {
+      const response = await axios.post(`${API}/create-checkout-session`, {
+        fragrance_slug: slug
+      });
+      
+      if (response.data.url) {
+        window.location.href = response.data.url;
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      toast.error("Unable to proceed with acquisition. Please try again.");
+      setCheckoutLoading(false);
     }
   };
 
@@ -72,13 +93,15 @@ export const ProductDetailPage = () => {
                 {fragrance.batch_number}
               </p>
             )}
-            <Link
-              to="/contact"
+            <button
+              onClick={handleAcquire}
+              disabled={checkoutLoading}
               data-testid="product-acquire-button"
-              className="inline-block w-fit bg-transparent text-[#F4F1EA] border border-[#BFA46D]/40 px-8 py-4 hover:bg-[#BFA46D] hover:text-[#0F0E0D] transition-colors duration-700 uppercase tracking-widest text-xs font-medium"
+              className="inline-block w-fit bg-transparent text-[#F4F1EA] border border-[#BFA46D]/40 px-8 py-4 hover:bg-[#BFA46D] hover:text-[#0F0E0D] transition-colors duration-700 uppercase tracking-widest text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label={checkoutLoading ? "Processing acquisition" : "Acquire fragrance"}
             >
-              Inquire to Acquire
-            </Link>
+              {checkoutLoading ? 'Processing...' : 'Acquire'}
+            </button>
           </div>
         </div>
       </section>
