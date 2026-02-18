@@ -121,6 +121,47 @@ async def get_fragrance_by_slug(slug: str):
     return fragrance
 
 
+@api_router.post("/create-checkout-session")
+async def create_checkout_session(input: CheckoutSessionCreate):
+    try:
+        fragrance = await db.fragrances.find_one({"slug": input.fragrance_slug}, {"_id": 0})
+        if not fragrance:
+            raise HTTPException(status_code=404, detail="Fragrance not found")
+        
+        frontend_url = os.environ.get('FRONTEND_URL', 'https://arar-atelier.preview.emergentagent.com')
+        
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[
+                {
+                    'price_data': {
+                        'currency': 'usd',
+                        'unit_amount': fragrance['price_amount'],
+                        'product_data': {
+                            'name': fragrance['name'],
+                            'description': fragrance['description'],
+                            'images': [fragrance['image_url']],
+                        },
+                    },
+                    'quantity': 1,
+                },
+            ],
+            mode='payment',
+            success_url=f"{frontend_url}/success?session_id={{CHECKOUT_SESSION_ID}}",
+            cancel_url=f"{frontend_url}/fragrance/{fragrance['slug']}",
+            metadata={
+                'fragrance_slug': fragrance['slug'],
+                'batch_number': fragrance.get('batch_number', '')
+            }
+        )
+        
+        return {"sessionId": checkout_session.id, "url": checkout_session.url}
+    except stripe.error.StripeError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+
 async def seed_fragrances():
     fragrances_data = [
         {
