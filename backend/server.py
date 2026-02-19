@@ -83,3 +83,9 @@ async def root():
 @app.get("/health")
 async def health_check():
     return {"status": "healthy", "version": "2.0.0"}
+
+
+@app.get("/api/health")
+async def api_health_check():
+    """Health check endpoint under /api prefix for Kubernetes routing."""
+    return {"status": "healthy", "version": "2.0.0", "service": "arar-parfums"}
