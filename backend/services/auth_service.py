@@ -5,7 +5,7 @@ from passlib.context import CryptContext
 from fastapi import HTTPException, status
 import os
 
-SECRET_KEY = os.environ.get("JWT_SECRET_KEY", "arar-parfums-secret-key-change-in-production")
+SECRET_KEY = os.environ.get("JWT_SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 1440  # 24 hours
 

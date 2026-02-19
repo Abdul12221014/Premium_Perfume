@@ -9,11 +9,11 @@ const AdminLogin = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  
+
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const from = location.state?.from?.pathname || "/admin";
 
   const handleSubmit = async (e) => {
@@ -67,7 +67,7 @@ const AdminLogin = () => {
                 required
                 data-testid="admin-login-email"
                 className="w-full bg-[#0a0a0a] border border-[#2a2a2a] px-4 py-3 text-[#c8c8c8] text-sm focus:outline-none focus:border-[#3a3a3a] transition-colors"
-                placeholder="admin@arar-parfums.com"
+                placeholder="admin@arar-perfume.com"
               />
             </div>
 

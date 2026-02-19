@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, status as http_status
 from pydantic import BaseModel
 from config.database import products_collection, orders_collection
 from emergentintegrations.payments.stripe.checkout import (
@@ -16,7 +16,8 @@ router = APIRouter()
 logger = logging.getLogger(__name__)
 
 # Get Stripe API key from environment
-STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY', os.environ.get('STRIPE_SECRET_KEY', ''))
+STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY', os.environ.get('STRIPE_SECRET_KEY'))
+STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
 
 
 class CheckoutRequest(BaseModel):
@@ -68,14 +69,28 @@ async def create_checkout_session(data: CheckoutRequest, request: Request):
         
         # Build dynamic URLs from frontend origin
         origin_url = data.origin_url.rstrip('/')
+        
+        # Production Safety: Forbidden localhost redirects in production mode
+        env_mode = os.environ.get("ENVIRONMENT", "development").lower()
+        if env_mode == "production" and "localhost" in origin_url:
+            logger.error(f"FATAL: Localhost redirect URL attempted in production mode: {origin_url}")
+            raise HTTPException(
+                status_code=http_status.HTTP_400_BAD_REQUEST,
+                detail="Production mode does not allow localhost redirect URLs."
+            )
+            
         success_url = f"{origin_url}/success?session_id={{CHECKOUT_SESSION_ID}}"
         cancel_url = f"{origin_url}/fragrance/{product['slug']}"
         
         # Initialize Stripe checkout with webhook URL
         host_url = str(request.base_url).rstrip('/')
-        webhook_url = f"{host_url}/api/webhook/stripe"
+        webhook_url = f"{host_url}/api/webhook"
         
-        stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
+        stripe_checkout = StripeCheckout(
+            api_key=STRIPE_API_KEY, 
+            webhook_url=webhook_url,
+            webhook_secret=STRIPE_WEBHOOK_SECRET
+        )
         
         # Create checkout session request
         checkout_request = CheckoutSessionRequest(
@@ -132,8 +147,12 @@ async def get_checkout_status(session_id: str, request: Request):
     try:
         # Initialize Stripe checkout
         host_url = str(request.base_url).rstrip('/')
-        webhook_url = f"{host_url}/api/webhook/stripe"
-        stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
+        webhook_url = f"{host_url}/api/webhook"
+        stripe_checkout = StripeCheckout(
+            api_key=STRIPE_API_KEY, 
+            webhook_url=webhook_url,
+            webhook_secret=STRIPE_WEBHOOK_SECRET
+        )
         
         # Get checkout status from Stripe
         status: CheckoutStatusResponse = await stripe_checkout.get_checkout_status(session_id)
@@ -207,7 +226,7 @@ async def get_checkout_status(session_id: str, request: Request):
         raise HTTPException(status_code=500, detail="Unable to check payment status")
 
 
-@router.post("/webhook/stripe")
+@router.post("/webhook")
 async def stripe_webhook(request: Request):
     """
     Handle Stripe webhooks using emergentintegrations.
@@ -215,15 +234,19 @@ async def stripe_webhook(request: Request):
     try:
         # Initialize Stripe checkout
         host_url = str(request.base_url).rstrip('/')
-        webhook_url = f"{host_url}/api/webhook/stripe"
-        stripe_checkout = StripeCheckout(api_key=STRIPE_API_KEY, webhook_url=webhook_url)
+        webhook_url = f"{host_url}/api/webhook"
+        stripe_checkout = StripeCheckout(
+            api_key=STRIPE_API_KEY, 
+            webhook_url=webhook_url,
+            webhook_secret=STRIPE_WEBHOOK_SECRET
+        )
         
         # Get webhook data
         payload = await request.body()
         sig_header = request.headers.get("Stripe-Signature")
         
-        # Handle the webhook
-        webhook_response = await stripe_checkout.handle_webhook(payload, sig_header)
+        # Handle the webhook with the secret for signature verification
+        webhook_response = await stripe_checkout.handle_webhook(payload, sig_header, STRIPE_WEBHOOK_SECRET)
         
         logger.info(f"Webhook received: {webhook_response.event_type} for session {webhook_response.session_id}")
         

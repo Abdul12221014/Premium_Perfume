@@ -122,8 +122,8 @@ export const ContactPage = () => {
             <h3 className="body-font text-xs tracking-[0.2em] uppercase text-[#BFA46D] mb-4">
               Email
             </h3>
-            <a href="mailto:atelier@arar-parfums.com" className="body-font text-base text-[#F4F1EA]/80 hover:text-[#F4F1EA] transition-colors duration-500">
-              atelier@arar-parfums.com
+            <a href="mailto:atelier@arar-perfume.com" className="body-font text-base text-[#F4F1EA]/80 hover:text-[#F4F1EA] transition-colors duration-500">
+              atelier@arar-perfume.com
             </a>
           </div>
           <div>

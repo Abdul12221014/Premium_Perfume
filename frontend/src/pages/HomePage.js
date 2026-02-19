@@ -74,7 +74,7 @@ export const HomePage = () => {
       >
         <div className="text-center px-6 animate-fade-in max-w-5xl">
           <h1 data-testid="hero-title" className="heading-font text-6xl md:text-8xl lg:text-[10rem] tracking-tighter text-[#F4F1EA] mb-8">
-            ARAR Parfums
+            ARAR Perfume
           </h1>
           <p data-testid="hero-tagline" className="body-font text-base md:text-lg font-light text-[#BFA46D]/80 mb-6 tracking-wide">
             Identity, Distilled.

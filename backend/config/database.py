@@ -16,5 +16,24 @@ newsletter_collection = db.newsletter
 contact_inquiries_collection = db.contact_inquiries
 
 
+async def initialize_database():
+    """
+    Initializes the database by creating necessary indexes.
+    """
+    # Products indexes
+    await products_collection.create_index("id", unique=True)
+    await products_collection.create_index("slug", unique=True)
+    
+    # Orders indexes
+    await orders_collection.create_index("id", unique=True)
+    await orders_collection.create_index("session_id", unique=True)
+    await orders_collection.create_index("created_at")
+    
+    # Newsletter unique index
+    await newsletter_collection.create_index("email", unique=True)
+    
+    print("Database initialization complete: Indexes created.")
+
+
 async def get_database():
     return db

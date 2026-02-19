@@ -49,9 +49,9 @@ class CloudinaryStorage(BaseImageStorage):
     """Cloudinary implementation for image storage."""
     
     def __init__(self):
-        self.cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME', '')
-        self.api_key = os.environ.get('CLOUDINARY_API_KEY', '')
-        self.api_secret = os.environ.get('CLOUDINARY_API_SECRET', '')
+        self.cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME')
+        self.api_key = os.environ.get('CLOUDINARY_API_KEY')
+        self.api_secret = os.environ.get('CLOUDINARY_API_SECRET')
         self.configured = bool(self.cloud_name and self.api_key and self.api_secret)
         
         if self.configured:
@@ -84,7 +84,7 @@ class CloudinaryStorage(BaseImageStorage):
         
         result = cloudinary.uploader.upload(
             file_data,
-            folder=f"arar-parfums/{folder}",
+            folder=f"arar-perfume/{folder}",
             public_id=base_name,
             overwrite=True,
             resource_type="image",

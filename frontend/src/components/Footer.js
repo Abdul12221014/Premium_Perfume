@@ -5,7 +5,7 @@ export const Footer = () => {
     <footer data-testid="main-footer" className="bg-[#050505] border-t border-[#BFA46D]/5">
       {/* Top divider */}
       <div className="luxury-divider" />
-      
+
       <div className="max-w-[1800px] mx-auto px-6 md:px-12 py-20 md:py-28">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-16 md:gap-12 mb-16">
           <div>
@@ -20,7 +20,7 @@ export const Footer = () => {
               Established 2024
             </p>
           </div>
-          
+
           <div>
             <h4 className="body-font text-[10px] tracking-[0.25em] uppercase mb-6 text-[#BFA46D]/80">Discover</h4>
             <div className="flex flex-col gap-4">
@@ -38,19 +38,19 @@ export const Footer = () => {
               </Link>
             </div>
           </div>
-          
+
           <div>
             <h4 className="body-font text-[10px] tracking-[0.25em] uppercase mb-6 text-[#BFA46D]/80">Connect</h4>
             <div className="flex flex-col gap-4">
               <Link to="/contact" data-testid="footer-contact" className="body-font text-xs text-[#F4F1EA]/50 hover:text-[#F4F1EA]/80 transition-all duration-700 hover:translate-x-1">
                 Contact
               </Link>
-              <a href="mailto:atelier@arar-parfums.com" data-testid="footer-email" className="body-font text-xs text-[#F4F1EA]/50 hover:text-[#F4F1EA]/80 transition-all duration-700 hover:translate-x-1">
-                atelier@arar-parfums.com
+              <a href="mailto:atelier@arar-perfume.com" data-testid="footer-email" className="body-font text-xs text-[#F4F1EA]/50 hover:text-[#F4F1EA]/80 transition-all duration-700 hover:translate-x-1">
+                atelier@arar-perfume.com
               </a>
             </div>
           </div>
-          
+
           <div>
             <h4 className="body-font text-[10px] tracking-[0.25em] uppercase mb-6 text-[#BFA46D]/80">Follow</h4>
             <div className="flex gap-6">
@@ -60,10 +60,10 @@ export const Footer = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="pt-12 border-t border-[#BFA46D]/5">
           <p className="body-font text-[10px] text-[#F4F1EA]/30 text-center tracking-wider">
-            © 2024 ARAR Parfums. All rights reserved.
+            © 2024 ARAR Perfume. All rights reserved.
           </p>
         </div>
       </div>
