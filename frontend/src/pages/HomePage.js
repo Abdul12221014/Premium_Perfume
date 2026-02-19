@@ -133,19 +133,19 @@ export const HomePage = () => {
                   key={fragrance.id}
                   to={`/fragrance/${fragrance.slug}`}
                   data-testid={`fragrance-card-${fragrance.slug}`}
-                  className="group relative overflow-hidden"
+                  className="group relative overflow-hidden block"
                   style={{
                     animationDelay: `${index * 150}ms`,
                     marginTop: index % 2 === 0 ? '0' : '4rem'
                   }}
                 >
-                  {/* Abstract bottle placeholder */}
-                  <div className="aspect-[3/4] overflow-hidden bg-gradient-to-b from-[#0F0E0D] to-[#1a1918] border border-[#BFA46D]/5 mb-8 flex items-center justify-center group-hover:border-[#BFA46D]/15 transition-all duration-700">
+                  {/* Abstract bottle placeholder with refined hover */}
+                  <div className="aspect-[3/4] overflow-hidden bg-gradient-to-b from-[#0F0E0D] to-[#1a1918] border border-[#BFA46D]/5 mb-8 flex items-center justify-center group-hover:border-[#BFA46D]/30 transition-all duration-700 transform group-hover:scale-[1.02]">
                     <BottleSilhouette />
                   </div>
 
                   <div className="px-2">
-                    <h3 data-testid={`fragrance-name-${fragrance.slug}`} className="heading-font text-2xl md:text-3xl text-[#F4F1EA] mb-4 tracking-tight">
+                    <h3 data-testid={`fragrance-name-${fragrance.slug}`} className="heading-font text-2xl md:text-3xl text-[#F4F1EA] mb-4 tracking-tight group-hover:text-[#BFA46D] transition-colors duration-500">
                       {fragrance.name}
                     </h3>
                     <p data-testid={`fragrance-description-${fragrance.slug}`} className="body-font text-xs md:text-sm font-light text-[#F4F1EA]/50 mb-6 leading-relaxed">
@@ -155,7 +155,7 @@ export const HomePage = () => {
                     <p data-testid={`fragrance-price-${fragrance.slug}`} className="body-font text-[11px] tracking-[0.2em] uppercase text-[#BFA46D]/60 mb-6">
                       {fragrance.price}
                     </p>
-                    <span data-testid={`fragrance-explore-${fragrance.slug}`} className="body-font text-[10px] tracking-[0.3em] uppercase text-[#F4F1EA]/40 group-hover:text-[#F4F1EA]/70 group-hover:tracking-[0.35em] transition-all duration-700">
+                    <span data-testid={`fragrance-explore-${fragrance.slug}`} className="body-font text-[10px] tracking-[0.3em] uppercase text-[#F4F1EA]/40 group-hover:text-[#BFA46D] group-hover:tracking-[0.35em] transition-all duration-700">
                       Explore →
                     </span>
                   </div>
@@ -170,14 +170,13 @@ export const HomePage = () => {
             </div>
           )}
 
-          {/* View all link */}
           <div className="text-center mt-20">
-            <Link
-              to="/"
-              className="body-font text-[10px] tracking-[0.3em] uppercase text-[#BFA46D]/60 hover:text-[#BFA46D] transition-all duration-700"
+            <a
+              href="#philosophy"
+              className="body-font text-[10px] tracking-[0.3em] uppercase text-[#BFA46D]/60 hover:text-[#BFA46D] transition-all duration-700 pointer-events-auto"
             >
               View Complete Collection
-            </Link>
+            </a>
           </div>
         </div>
       </section>
