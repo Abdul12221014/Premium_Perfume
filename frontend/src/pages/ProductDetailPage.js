@@ -119,49 +119,52 @@ export const ProductDetailPage = () => {
       <div className="luxury-divider" />
 
       {/* The Identity */}
-      <section data-testid="product-identity" className="py-24 px-6 md:px-12 bg-[#050505]">
-        <div className="max-w-[1200px] mx-auto">
-          <h2 data-testid="identity-title" className="heading-font text-3xl md:text-4xl tracking-tight text-[#F4F1EA] mb-8">
+      <section data-testid="product-identity" className="py-28 px-6 md:px-12 bg-[#050505]">
+        <div className="max-w-[1100px] mx-auto">
+          <h2 data-testid="identity-title" className="heading-font text-3xl md:text-5xl tracking-tight text-[#F4F1EA] mb-10">
             The Identity
           </h2>
-          <p data-testid="identity-text" className="body-font text-base md:text-lg font-light text-[#F4F1EA]/80 leading-loose max-w-3xl">
+          <p data-testid="identity-text" className="body-font text-sm md:text-base font-light text-[#F4F1EA]/70 leading-loose max-w-3xl">
             {fragrance.identity}
           </p>
         </div>
       </section>
 
+      {/* Divider */}
+      <div className="luxury-divider" />
+
       {/* Olfactory Architecture */}
-      <section data-testid="product-notes" className="py-24 px-6 md:px-12 bg-[#0F0E0D]">
-        <div className="max-w-[1200px] mx-auto">
-          <h2 data-testid="notes-title" className="heading-font text-3xl md:text-4xl tracking-tight text-[#F4F1EA] mb-16">
+      <section data-testid="product-notes" className="py-28 px-6 md:px-12 bg-[#0F0E0D]">
+        <div className="max-w-[1100px] mx-auto">
+          <h2 data-testid="notes-title" className="heading-font text-3xl md:text-5xl tracking-tight text-[#F4F1EA] mb-20">
             Olfactory Architecture
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
             <div data-testid="notes-top">
-              <h3 className="body-font text-xs tracking-[0.2em] uppercase text-[#BFA46D] mb-4">
+              <h3 className="body-font text-[10px] tracking-[0.25em] uppercase text-[#BFA46D]/70 mb-6">
                 Top Notes
               </h3>
-              <ul className="body-font text-base font-light text-[#F4F1EA]/80 space-y-2">
+              <ul className="body-font text-sm font-light text-[#F4F1EA]/70 space-y-3">
                 {fragrance.notes_top.map((note, index) => (
                   <li key={index}>{note}</li>
                 ))}
               </ul>
             </div>
             <div data-testid="notes-heart">
-              <h3 className="body-font text-xs tracking-[0.2em] uppercase text-[#BFA46D] mb-4">
+              <h3 className="body-font text-[10px] tracking-[0.25em] uppercase text-[#BFA46D]/70 mb-6">
                 Heart Notes
               </h3>
-              <ul className="body-font text-base font-light text-[#F4F1EA]/80 space-y-2">
+              <ul className="body-font text-sm font-light text-[#F4F1EA]/70 space-y-3">
                 {fragrance.notes_heart.map((note, index) => (
                   <li key={index}>{note}</li>
                 ))}
               </ul>
             </div>
             <div data-testid="notes-base">
-              <h3 className="body-font text-xs tracking-[0.2em] uppercase text-[#BFA46D] mb-4">
+              <h3 className="body-font text-[10px] tracking-[0.25em] uppercase text-[#BFA46D]/70 mb-6">
                 Base Notes
               </h3>
-              <ul className="body-font text-base font-light text-[#F4F1EA]/80 space-y-2">
+              <ul className="body-font text-sm font-light text-[#F4F1EA]/70 space-y-3">
                 {fragrance.notes_base.map((note, index) => (
                   <li key={index}>{note}</li>
                 ))}
@@ -171,46 +174,52 @@ export const ProductDetailPage = () => {
         </div>
       </section>
 
+      {/* Divider */}
+      <div className="luxury-divider" />
+
       {/* The Ritual */}
-      <section data-testid="product-ritual" className="py-24 px-6 md:px-12 bg-[#050505]">
-        <div className="max-w-[1200px] mx-auto">
-          <h2 data-testid="ritual-title" className="heading-font text-3xl md:text-4xl tracking-tight text-[#F4F1EA] mb-8">
+      <section data-testid="product-ritual" className="py-28 px-6 md:px-12 bg-[#050505]">
+        <div className="max-w-[1100px] mx-auto">
+          <h2 data-testid="ritual-title" className="heading-font text-3xl md:text-5xl tracking-tight text-[#F4F1EA] mb-10">
             The Ritual
           </h2>
-          <p data-testid="ritual-text" className="body-font text-base md:text-lg font-light text-[#F4F1EA]/80 leading-loose max-w-3xl">
+          <p data-testid="ritual-text" className="body-font text-sm md:text-base font-light text-[#F4F1EA]/70 leading-loose max-w-3xl">
             {fragrance.ritual}
           </p>
         </div>
       </section>
 
+      {/* Divider */}
+      <div className="luxury-divider" />
+
       {/* Craft */}
-      <section data-testid="product-craft" className="py-24 px-6 md:px-12 bg-[#0F0E0D]">
-        <div className="max-w-[1200px] mx-auto">
-          <h2 data-testid="craft-title" className="heading-font text-3xl md:text-4xl tracking-tight text-[#F4F1EA] mb-8">
+      <section data-testid="product-craft" className="py-28 px-6 md:px-12 bg-[#0F0E0D]">
+        <div className="max-w-[1100px] mx-auto">
+          <h2 data-testid="craft-title" className="heading-font text-3xl md:text-5xl tracking-tight text-[#F4F1EA] mb-10">
             The Craft
           </h2>
-          <p data-testid="craft-text" className="body-font text-base md:text-lg font-light text-[#F4F1EA]/80 leading-loose max-w-3xl">
+          <p data-testid="craft-text" className="body-font text-sm md:text-base font-light text-[#F4F1EA]/70 leading-loose max-w-3xl">
             {fragrance.craft}
           </p>
         </div>
       </section>
 
       {/* Trust Section */}
-      <section data-testid="product-trust" className="py-16 px-6 md:px-12 bg-[#050505] border-t border-[#BFA46D]/10">
-        <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row justify-center gap-16 text-center">
+      <section data-testid="product-trust" className="py-20 px-6 md:px-12 bg-[#050505] border-t border-[#BFA46D]/5">
+        <div className="max-w-[1100px] mx-auto flex flex-col md:flex-row justify-center gap-20 text-center">
           <div>
-            <p className="body-font text-xs tracking-[0.2em] uppercase text-[#BFA46D] mb-2">
+            <p className="body-font text-[10px] tracking-[0.25em] uppercase text-[#BFA46D]/70 mb-3">
               Complimentary Shipping
             </p>
-            <p className="body-font text-sm font-light text-[#F4F1EA]/60">
+            <p className="body-font text-xs font-light text-[#F4F1EA]/50">
               Worldwide
             </p>
           </div>
           <div>
-            <p className="body-font text-xs tracking-[0.2em] uppercase text-[#BFA46D] mb-2">
+            <p className="body-font text-[10px] tracking-[0.25em] uppercase text-[#BFA46D]/70 mb-3">
               Secure Inquiry
             </p>
-            <p className="body-font text-sm font-light text-[#F4F1EA]/60">
+            <p className="body-font text-xs font-light text-[#F4F1EA]/50">
               Private & Confidential
             </p>
           </div>
