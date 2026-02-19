@@ -20,16 +20,23 @@ async def initialize_database():
     """
     Initializes the database by creating necessary indexes.
     """
+    print("Starting database initialization...")
     # Products indexes
+    print("Creating index: products.id")
     await products_collection.create_index("id", unique=True)
+    print("Creating index: products.slug")
     await products_collection.create_index("slug", unique=True)
     
     # Orders indexes
+    print("Creating index: orders.id")
     await orders_collection.create_index("id", unique=True)
+    print("Creating index: orders.session_id")
     await orders_collection.create_index("session_id", unique=True)
+    print("Creating index: orders.created_at")
     await orders_collection.create_index("created_at")
     
     # Newsletter unique index
+    print("Creating index: newsletter.email")
     await newsletter_collection.create_index("email", unique=True)
     
     print("Database initialization complete: Indexes created.")
