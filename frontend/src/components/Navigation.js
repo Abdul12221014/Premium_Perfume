@@ -59,14 +59,14 @@ export const Navigation = () => {
           </Link>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8 md:gap-12">
+          <div className="hidden md:flex items-center gap-10 lg:gap-14">
             {navLinks.map(link => (
               <Link
                 key={link.path}
                 to={link.path}
                 data-testid={`nav-${link.label.toLowerCase().replace(' ', '-')}`}
-                className={`body-font text-xs tracking-widest uppercase transition-colors duration-500 ${
-                  isActive(link.path) ? 'text-[#BFA46D]' : 'text-[#F4F1EA]/70 hover:text-[#F4F1EA]'
+                className={`body-font text-[10px] tracking-[0.25em] uppercase transition-all duration-700 ${
+                  isActive(link.path) ? 'text-[#BFA46D] opacity-100' : 'text-[#F4F1EA]/60 hover:text-[#F4F1EA]/90 hover:tracking-[0.28em]'
                 }`}
                 aria-current={isActive(link.path) ? 'page' : undefined}
               >
