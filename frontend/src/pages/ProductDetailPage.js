@@ -32,8 +32,10 @@ export const ProductDetailPage = () => {
     
     setCheckoutLoading(true);
     try {
+      // Send origin_url for dynamic success/cancel URL generation
       const response = await axios.post(`${API}/create-checkout-session`, {
-        fragrance_slug: slug
+        fragrance_slug: slug,
+        origin_url: window.location.origin
       });
       
       if (response.data.url) {
@@ -41,7 +43,8 @@ export const ProductDetailPage = () => {
       }
     } catch (error) {
       console.error("Checkout error:", error);
-      toast.error("Unable to proceed with acquisition. Please try again.");
+      const errorMessage = error.response?.data?.detail || "Unable to proceed with acquisition. Please try again.";
+      toast.error(errorMessage);
       setCheckoutLoading(false);
     }
   };
