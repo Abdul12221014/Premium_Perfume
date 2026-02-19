@@ -1,5 +1,7 @@
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, status as http_status
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import Response
 from dotenv import load_dotenv
 from pathlib import Path
 import os
@@ -9,8 +11,12 @@ import logging
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# Create FastAPI app
-app = FastAPI(title="ARAR Parfums API", version="2.0.0")
+# Create FastAPI app with redirect_slashes disabled to prevent 307 redirects
+app = FastAPI(
+    title="ARAR Parfums API",
+    version="2.0.0",
+    redirect_slashes=False
+)
 
 # CORS Middleware
 app.add_middleware(
