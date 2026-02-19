@@ -15,9 +15,9 @@ const BottleSilhouette = () => (
         <stop offset="100%" stopColor="rgba(191, 164, 109, 0.02)" />
       </linearGradient>
     </defs>
-    <rect x="60" y="40" width="80" height="60" fill="url(#bottleGradient)" opacity="0.3"/>
-    <rect x="70" y="100" width="60" height="280" fill="url(#bottleGradient)" opacity="0.4"/>
-    <rect x="75" y="105" width="50" height="270" fill="rgba(244, 241, 234, 0.02)"/>
+    <rect x="60" y="40" width="80" height="60" fill="url(#bottleGradient)" opacity="0.3" />
+    <rect x="70" y="100" width="60" height="280" fill="url(#bottleGradient)" opacity="0.4" />
+    <rect x="75" y="105" width="50" height="270" fill="rgba(244, 241, 234, 0.02)" />
   </svg>
 );
 
@@ -62,7 +62,7 @@ export const HomePage = () => {
   return (
     <div className="grain-overlay">
       {/* Hero Section - Increased padding */}
-      <section 
+      <section
         data-testid="hero-section"
         className="relative h-screen flex items-center justify-center overflow-hidden"
         style={{
@@ -82,7 +82,7 @@ export const HomePage = () => {
           <p data-testid="hero-subtitle" className="body-font text-sm md:text-base font-light text-[#F4F1EA]/50 mb-16 max-w-2xl mx-auto leading-loose">
             A presence you do not announce. A memory that remains.
           </p>
-          <a 
+          <a
             href="#philosophy"
             data-testid="hero-cta"
             className="inline-block bg-transparent text-[#F4F1EA] border border-[#BFA46D]/20 px-10 py-5 hover:border-[#BFA46D]/60 hover:bg-[#BFA46D]/5 transition-all duration-700 uppercase tracking-[0.3em] text-[10px] font-light"
@@ -124,47 +124,55 @@ export const HomePage = () => {
           <h2 data-testid="collection-title" className="heading-font text-4xl md:text-6xl tracking-tight text-[#F4F1EA] mb-24 text-center">
             The Collection
           </h2>
-          
+
           {/* Editorial asymmetric grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
-            {fragrances.map((fragrance, index) => (
-              <Link
-                key={fragrance.id}
-                to={`/fragrance/${fragrance.slug}`}
-                data-testid={`fragrance-card-${fragrance.slug}`}
-                className="group relative overflow-hidden"
-                style={{ 
-                  animationDelay: `${index * 150}ms`,
-                  marginTop: index % 2 === 0 ? '0' : '4rem'
-                }}
-              >
-                {/* Abstract bottle placeholder */}
-                <div className="aspect-[3/4] overflow-hidden bg-gradient-to-b from-[#0F0E0D] to-[#1a1918] border border-[#BFA46D]/5 mb-8 flex items-center justify-center group-hover:border-[#BFA46D]/15 transition-all duration-700">
-                  <BottleSilhouette />
-                </div>
-                
-                <div className="px-2">
-                  <h3 data-testid={`fragrance-name-${fragrance.slug}`} className="heading-font text-2xl md:text-3xl text-[#F4F1EA] mb-4 tracking-tight">
-                    {fragrance.name}
-                  </h3>
-                  <p data-testid={`fragrance-description-${fragrance.slug}`} className="body-font text-xs md:text-sm font-light text-[#F4F1EA]/50 mb-6 leading-relaxed">
-                    {fragrance.short_description || fragrance.description}
-                  </p>
-                  {/* Refined price hierarchy - smaller and muted */}
-                  <p data-testid={`fragrance-price-${fragrance.slug}`} className="body-font text-[11px] tracking-[0.2em] uppercase text-[#BFA46D]/60 mb-6">
-                    {fragrance.price}
-                  </p>
-                  <span data-testid={`fragrance-explore-${fragrance.slug}`} className="body-font text-[10px] tracking-[0.3em] uppercase text-[#F4F1EA]/40 group-hover:text-[#F4F1EA]/70 group-hover:tracking-[0.35em] transition-all duration-700">
-                    Explore →
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
+          {fragrances.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
+              {fragrances.map((fragrance, index) => (
+                <Link
+                  key={fragrance.id}
+                  to={`/fragrance/${fragrance.slug}`}
+                  data-testid={`fragrance-card-${fragrance.slug}`}
+                  className="group relative overflow-hidden"
+                  style={{
+                    animationDelay: `${index * 150}ms`,
+                    marginTop: index % 2 === 0 ? '0' : '4rem'
+                  }}
+                >
+                  {/* Abstract bottle placeholder */}
+                  <div className="aspect-[3/4] overflow-hidden bg-gradient-to-b from-[#0F0E0D] to-[#1a1918] border border-[#BFA46D]/5 mb-8 flex items-center justify-center group-hover:border-[#BFA46D]/15 transition-all duration-700">
+                    <BottleSilhouette />
+                  </div>
+
+                  <div className="px-2">
+                    <h3 data-testid={`fragrance-name-${fragrance.slug}`} className="heading-font text-2xl md:text-3xl text-[#F4F1EA] mb-4 tracking-tight">
+                      {fragrance.name}
+                    </h3>
+                    <p data-testid={`fragrance-description-${fragrance.slug}`} className="body-font text-xs md:text-sm font-light text-[#F4F1EA]/50 mb-6 leading-relaxed">
+                      {fragrance.short_description || fragrance.description}
+                    </p>
+                    {/* Refined price hierarchy - smaller and muted */}
+                    <p data-testid={`fragrance-price-${fragrance.slug}`} className="body-font text-[11px] tracking-[0.2em] uppercase text-[#BFA46D]/60 mb-6">
+                      {fragrance.price}
+                    </p>
+                    <span data-testid={`fragrance-explore-${fragrance.slug}`} className="body-font text-[10px] tracking-[0.3em] uppercase text-[#F4F1EA]/40 group-hover:text-[#F4F1EA]/70 group-hover:tracking-[0.35em] transition-all duration-700">
+                      Explore →
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-20 animate-fade-in">
+              <p className="body-font text-sm font-light text-[#F4F1EA]/30 tracking-[0.2em] uppercase">
+                The collection is currently resting.
+              </p>
+            </div>
+          )}
 
           {/* View all link */}
           <div className="text-center mt-20">
-            <Link 
+            <Link
               to="/"
               className="body-font text-[10px] tracking-[0.3em] uppercase text-[#BFA46D]/60 hover:text-[#BFA46D] transition-all duration-700"
             >
