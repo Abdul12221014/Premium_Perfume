@@ -91,14 +91,32 @@ textarea:focus-visible {
   outline-offset: 4px;
 }
 
-/* Remove Emergent badge */
+/* Remove Emergent badge - comprehensive */
 a[href*="emergentagent.com"],
 div[class*="emergent"],
-.emergent-badge {
+.emergent-badge,
+[class*="made-with"],
+[class*="powered-by"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+/* Target specific badge positions */
+body > *:last-child:not(#root):not(.App),
+footer ~ *,
+[style*="position: fixed"][style*="bottom"],
+[style*="position: fixed"][style*="right"] {
   display: none !important;
 }
 
 /* Hide Made with Emergent text */
-body::after {
+body::after,
+#root::after,
+.App::after {
   display: none !important;
 }
