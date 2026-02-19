@@ -33,7 +33,7 @@ async def create_checkout_session(data: CheckoutSessionCreate):
         if product.get("stock_quantity", 0) <= 0:
             raise HTTPException(status_code=400, detail="Product out of stock")
         
-        frontend_url = os.environ.get('FRONTEND_URL', 'https://arar-atelier.preview.emergentagent.com')
+        frontend_url = os.environ.get('FRONTEND_URL', 'https://arar-atelier-admin.preview.emergentagent.com')
         
         # Create Stripe session
         checkout_session = stripe.checkout.Session.create(

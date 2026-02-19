@@ -128,7 +128,7 @@ async def create_checkout_session(input: CheckoutSessionCreate):
         if not fragrance:
             raise HTTPException(status_code=404, detail="Fragrance not found")
         
-        frontend_url = os.environ.get('FRONTEND_URL', 'https://arar-atelier.preview.emergentagent.com')
+        frontend_url = os.environ.get('FRONTEND_URL', 'https://arar-atelier-admin.preview.emergentagent.com')
         
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
