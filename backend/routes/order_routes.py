@@ -6,7 +6,7 @@ from typing import Optional
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("")
 async def get_all_orders(
     status: Optional[str] = None,
     current_admin: dict = Depends(get_current_admin)

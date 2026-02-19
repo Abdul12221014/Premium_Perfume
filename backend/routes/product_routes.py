@@ -8,14 +8,14 @@ import uuid
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("")
 async def get_all_products(current_admin: dict = Depends(get_current_admin)):
     """Get all products (including drafts) for admin"""
     products = await products_collection.find({}, {"_id": 0}).to_list(1000)
     return products
 
 
-@router.post("/", response_model=dict)
+@router.post("", response_model=dict)
 async def create_product(product: ProductCreate, current_admin: dict = Depends(get_current_admin)):
     """Create new product"""
     # Check if slug exists

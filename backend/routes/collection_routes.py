@@ -8,14 +8,14 @@ import uuid
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("")
 async def get_all_collections(current_admin: dict = Depends(get_current_admin)):
     """Get all collections"""
     collections = await collections_collection.find({}, {"_id": 0}).to_list(100)
     return collections
 
 
-@router.post("/")
+@router.post("")
 async def create_collection(
     collection: CollectionCreate,
     current_admin: dict = Depends(get_current_admin)
