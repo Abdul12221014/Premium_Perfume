@@ -67,44 +67,56 @@ export const ProductDetailPage = () => {
 
   return (
     <div className="grain-overlay bg-[#0F0E0D] min-h-screen pt-32">
-      {/* Product Hero */}
-      <section data-testid="product-hero" className="px-6 md:px-12 pb-24">
-        <div className="max-w-[1800px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+      {/* Product Hero - Increased spacing */}
+      <section data-testid="product-hero" className="px-6 md:px-12 pb-32 pt-12">
+        <div className="max-w-[1700px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-28">
           <div className="animate-fade-in">
-            <img
-              src={fragrance.image_url}
-              alt={fragrance.name}
-              data-testid="product-image"
-              className="w-full h-[700px] object-cover brightness-[0.8] contrast-[1.1] grayscale-[0.2]"
-            />
+            {/* Abstract bottle placeholder */}
+            <div className="w-full h-[750px] bg-gradient-to-b from-[#0F0E0D] to-[#1a1918] border border-[#BFA46D]/5 flex items-center justify-center">
+              <svg viewBox="0 0 200 400" className="w-2/3 h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="bottleDetailGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="rgba(191, 164, 109, 0.1)" />
+                    <stop offset="100%" stopColor="rgba(191, 164, 109, 0.03)" />
+                  </linearGradient>
+                </defs>
+                <rect x="60" y="40" width="80" height="60" fill="url(#bottleDetailGradient)" opacity="0.4"/>
+                <rect x="70" y="100" width="60" height="280" fill="url(#bottleDetailGradient)" opacity="0.5"/>
+                <rect x="75" y="105" width="50" height="270" fill="rgba(244, 241, 234, 0.03)"/>
+              </svg>
+            </div>
           </div>
           <div className="flex flex-col justify-center animate-fade-in">
-            <h1 data-testid="product-name" className="heading-font text-4xl md:text-6xl tracking-tight text-[#F4F1EA] mb-6">
+            <h1 data-testid="product-name" className="heading-font text-5xl md:text-7xl tracking-tight text-[#F4F1EA] mb-8">
               {fragrance.name}
             </h1>
-            <p data-testid="product-description" className="body-font text-lg md:text-xl font-light text-[#BFA46D] mb-8 leading-relaxed">
-              {fragrance.description}
+            <p data-testid="product-description" className="body-font text-base md:text-lg font-light text-[#BFA46D]/70 mb-10 leading-relaxed">
+              {fragrance.short_description || fragrance.description}
             </p>
-            <p data-testid="product-price" className="body-font text-2xl text-[#F4F1EA] mb-8">
+            {/* Refined price - smaller, muted */}
+            <p data-testid="product-price" className="body-font text-sm tracking-[0.2em] uppercase text-[#F4F1EA]/60 mb-4">
               {fragrance.price}
             </p>
             {fragrance.batch_number && (
-              <p data-testid="product-batch" className="body-font text-xs tracking-[0.2em] uppercase text-[#F4F1EA]/40 mb-12">
+              <p data-testid="product-batch" className="body-font text-[10px] tracking-[0.25em] uppercase text-[#F4F1EA]/30 mb-14">
                 {fragrance.batch_number}
               </p>
             )}
             <button
               onClick={handleAcquire}
-              disabled={checkoutLoading}
+              disabled={checkoutLoading || fragrance.stock_quantity === 0}
               data-testid="product-acquire-button"
-              className="inline-block w-fit bg-transparent text-[#F4F1EA] border border-[#BFA46D]/40 px-8 py-4 hover:bg-[#BFA46D] hover:text-[#0F0E0D] transition-colors duration-700 uppercase tracking-widest text-xs font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-              aria-label={checkoutLoading ? "Processing acquisition" : "Acquire fragrance"}
+              className="inline-block w-fit bg-transparent text-[#F4F1EA] border border-[#BFA46D]/20 px-10 py-5 hover:border-[#BFA46D]/60 hover:bg-[#BFA46D]/5 transition-all duration-700 uppercase tracking-[0.3em] text-[10px] font-light disabled:opacity-30 disabled:cursor-not-allowed"
+              aria-label={checkoutLoading ? "Processing acquisition" : fragrance.stock_quantity === 0 ? "Out of stock" : "Acquire fragrance"}
             >
-              {checkoutLoading ? 'Processing...' : 'Acquire'}
+              {checkoutLoading ? 'Processing' : fragrance.stock_quantity === 0 ? 'Currently Unavailable' : 'Acquire'}
             </button>
           </div>
         </div>
       </section>
+
+      {/* Divider */}
+      <div className="luxury-divider" />
 
       {/* The Identity */}
       <section data-testid="product-identity" className="py-24 px-6 md:px-12 bg-[#050505]">
