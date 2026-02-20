@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
+from pydantic import BaseModel
 from models.product import ProductCreate, ProductUpdate, Product
 from middleware.auth_middleware import get_current_admin
 from config.database import products_collection
@@ -6,6 +7,12 @@ from datetime import datetime
 import uuid
 
 router = APIRouter()
+
+class StockUpdatePayload(BaseModel):
+    stock_quantity: int
+
+class StatusUpdatePayload(BaseModel):
+    status: str
 
 
 @router.get("")
@@ -81,33 +88,33 @@ async def delete_product(product_id: str, current_admin: dict = Depends(get_curr
 @router.patch("/{product_id}/stock")
 async def update_stock(
     product_id: str,
-    stock_quantity: int,
+    payload: StockUpdatePayload,
     current_admin: dict = Depends(get_current_admin)
 ):
     """Update product stock"""
     result = await products_collection.update_one(
         {"id": product_id},
-        {"$set": {"stock_quantity": stock_quantity, "updated_at": datetime.utcnow().isoformat()}}
+        {"$set": {"stock_quantity": payload.stock_quantity, "updated_at": datetime.utcnow().isoformat()}}
     )
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Product not found")
-    return {"message": "Stock updated successfully", "stock_quantity": stock_quantity}
+    return {"message": "Stock updated successfully", "stock_quantity": payload.stock_quantity}
 
 
 @router.patch("/{product_id}/status")
 async def update_status(
     product_id: str,
-    status: str,
+    payload: StatusUpdatePayload,
     current_admin: dict = Depends(get_current_admin)
 ):
     """Update product status (published/draft/archived)"""
-    if status not in ["published", "draft", "archived"]:
+    if payload.status not in ["published", "draft", "archived"]:
         raise HTTPException(status_code=400, detail="Invalid status")
     
     result = await products_collection.update_one(
         {"id": product_id},
-        {"$set": {"status": status, "updated_at": datetime.utcnow().isoformat()}}
+        {"$set": {"status": payload.status, "updated_at": datetime.utcnow().isoformat()}}
     )
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Product not found")
-    return {"message": "Status updated successfully", "status": status}
+    return {"message": "Status updated successfully", "status": payload.status}

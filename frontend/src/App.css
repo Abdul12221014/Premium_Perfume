@@ -92,9 +92,10 @@ textarea:focus-visible {
 }
 
 /* Remove Emergent badge - comprehensive */
+a[href*="emergent.sh"],
 a[href*="emergentagent.com"],
 div[class*="emergent"],
-.emergent-badge,
+#emergent-badge,
 [class*="made-with"],
 [class*="powered-by"] {
   display: none !important;

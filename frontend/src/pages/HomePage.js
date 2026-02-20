@@ -33,8 +33,8 @@ export const HomePage = () => {
   const fetchFragrances = async () => {
     try {
       const response = await axios.get(`${API}/fragrances`);
-      // Limit to first 3 for homepage (scarcity over abundance)
-      setFragrances(response.data.slice(0, 3));
+      // Display all published fragrances on the homepage
+      setFragrances(response.data);
     } catch (error) {
       console.error("Error fetching fragrances:", error);
     }
