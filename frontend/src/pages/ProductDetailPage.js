@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/sonner";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -11,6 +11,7 @@ export const ProductDetailPage = () => {
   const [fragrance, setFragrance] = useState(null);
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [errorStatus, setErrorStatus] = useState(null);
 
   useEffect(() => {
     fetchFragrance();
@@ -29,23 +30,35 @@ export const ProductDetailPage = () => {
 
   const handleAcquire = async () => {
     if (checkoutLoading) return;
-    
+
     setCheckoutLoading(true);
+    setErrorStatus(null);
+
     try {
-      // Send origin_url for dynamic success/cancel URL generation
+      console.log("Initiating acquisition for:", slug);
+
       const response = await axios.post(`${API}/create-checkout-session`, {
         fragrance_slug: slug,
         origin_url: window.location.origin
       });
-      
+
       if (response.data.url) {
         window.location.href = response.data.url;
       }
     } catch (error) {
       console.error("Checkout error:", error);
       const errorMessage = error.response?.data?.detail || "Unable to proceed with acquisition. Please try again.";
-      toast.error(errorMessage);
+
+      // Multi-channel feedback
+      toast.error(errorMessage, {
+        description: "Please check your configuration or try again later.",
+      });
+
+      setErrorStatus(errorMessage);
       setCheckoutLoading(false);
+
+      // Auto-clear error status after some time
+      setTimeout(() => setErrorStatus(null), 5000);
     }
   };
 
@@ -83,9 +96,9 @@ export const ProductDetailPage = () => {
                     <stop offset="100%" stopColor="rgba(191, 164, 109, 0.03)" />
                   </linearGradient>
                 </defs>
-                <rect x="60" y="40" width="80" height="60" fill="url(#bottleDetailGradient)" opacity="0.4"/>
-                <rect x="70" y="100" width="60" height="280" fill="url(#bottleDetailGradient)" opacity="0.5"/>
-                <rect x="75" y="105" width="50" height="270" fill="rgba(244, 241, 234, 0.03)"/>
+                <rect x="60" y="40" width="80" height="60" fill="url(#bottleDetailGradient)" opacity="0.4" />
+                <rect x="70" y="100" width="60" height="280" fill="url(#bottleDetailGradient)" opacity="0.5" />
+                <rect x="75" y="105" width="50" height="270" fill="rgba(244, 241, 234, 0.03)" />
               </svg>
             </div>
           </div>
@@ -105,15 +118,25 @@ export const ProductDetailPage = () => {
                 {fragrance.batch_number}
               </p>
             )}
-            <button
-              onClick={handleAcquire}
-              disabled={checkoutLoading || fragrance.stock_quantity === 0}
-              data-testid="product-acquire-button"
-              className="inline-block w-fit bg-transparent text-[#F4F1EA] border border-[#BFA46D]/20 px-10 py-5 hover:border-[#BFA46D]/60 hover:bg-[#BFA46D]/5 transition-all duration-700 uppercase tracking-[0.3em] text-[10px] font-light disabled:opacity-30 disabled:cursor-not-allowed"
-              aria-label={checkoutLoading ? "Processing acquisition" : fragrance.stock_quantity === 0 ? "Out of stock" : "Acquire fragrance"}
-            >
-              {checkoutLoading ? 'Processing' : fragrance.stock_quantity === 0 ? 'Currently Unavailable' : 'Acquire'}
-            </button>
+            <div className="relative">
+              <button
+                onClick={handleAcquire}
+                disabled={checkoutLoading || fragrance.stock_quantity === 0}
+                data-testid="product-acquire-button"
+                className={`inline-block w-fit bg-transparent text-[#F4F1EA] border px-10 py-5 transition-all duration-700 uppercase tracking-[0.3em] text-[10px] font-light 
+                  ${errorStatus ? 'border-red-500/50 bg-red-500/5' : 'border-[#BFA46D]/20 hover:border-[#BFA46D]/60 hover:bg-[#BFA46D]/5'}
+                  disabled:opacity-30 disabled:cursor-not-allowed relative z-10`}
+                aria-label={checkoutLoading ? "Processing acquisition" : fragrance.stock_quantity === 0 ? "Out of stock" : "Acquire fragrance"}
+              >
+                {checkoutLoading ? 'Processing...' : fragrance.stock_quantity === 0 ? 'Currently Unavailable' : 'Acquire'}
+              </button>
+
+              {errorStatus && (
+                <p className="absolute -bottom-8 left-0 body-font text-[10px] text-red-400/80 tracking-widest uppercase animate-fade-in">
+                  {errorStatus}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </section>

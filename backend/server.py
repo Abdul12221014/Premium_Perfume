@@ -66,25 +66,15 @@ async def global_exception_handler(request, exc):
     raise exc
 
 # Import routes
-from routes import admin_routes, product_routes, collection_routes, order_routes, public_routes
-
-# Checkout routes depend on an external package (`emergentintegrations`) that may not
-# be available in all local dev environments. We load them optionally so the API can
-# still run (without checkout endpoints) for development.
-try:
-    from routes import checkout_routes  # type: ignore
-except Exception as e:  # pragma: no cover
-    checkout_routes = None
-    logger.warning("Checkout routes disabled (optional dependency missing): %s", e)
+from routes import admin_routes, product_routes, collection_routes, order_routes, public_routes, checkout_routes
 
 # Include routers
 app.include_router(public_routes.router, prefix="/api", tags=["Public"])
+app.include_router(checkout_routes.router, prefix="/api", tags=["Checkout"])
 app.include_router(admin_routes.router, prefix="/api/admin", tags=["Admin"])
 app.include_router(product_routes.router, prefix="/api/admin/products", tags=["Products"])
 app.include_router(collection_routes.router, prefix="/api/admin/collections", tags=["Collections"])
 app.include_router(order_routes.router, prefix="/api/admin/orders", tags=["Orders"])
-if checkout_routes is not None:
-    app.include_router(checkout_routes.router, prefix="/api", tags=["Checkout"])
 
 
 @app.on_event("startup")
