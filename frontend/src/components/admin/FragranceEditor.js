@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
-import { X, Plus, Trash2, Save, Upload } from "lucide-react";
+import { X, Plus, Trash2, Save, Upload, Loader2 } from "lucide-react";
+import { useDropzone } from "react-dropzone";
 import { toast } from "sonner";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -10,6 +11,7 @@ const API = `${BACKEND_URL}/api`;
 const FragranceEditor = ({ fragrance, isOpen, onClose, onSave }) => {
     const { getAuthHeaders } = useAuth();
     const [loading, setLoading] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
 
     // Initialize form state
     const [formData, setFormData] = useState({
@@ -84,6 +86,57 @@ const FragranceEditor = ({ fragrance, isOpen, onClose, onSave }) => {
         const newArray = formData[field].filter((_, i) => i !== index);
         setFormData(prev => ({ ...prev, [field]: newArray }));
     };
+
+    const onDrop = async (acceptedFiles, fileRejections) => {
+        if (fileRejections.length > 0) {
+            toast.error("File rejected. Must be an image under 3MB.");
+            return;
+        }
+
+        const file = acceptedFiles[0];
+        if (!file) return;
+
+        setIsUploading(true);
+        try {
+            // 1. Get Signature from Backend
+            const headers = getAuthHeaders();
+            const sigRes = await axios.get(`${API}/media/upload-signature`, { headers });
+            const { signature, timestamp, cloud_name, api_key, folder } = sigRes.data;
+
+            // 2. Upload directly to Cloudinary
+            const uploadData = new FormData();
+            uploadData.append("file", file);
+            uploadData.append("api_key", api_key);
+            uploadData.append("timestamp", timestamp);
+            uploadData.append("signature", signature);
+            uploadData.append("folder", folder);
+
+            const uploadRes = await axios.post(
+                `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+                uploadData
+            );
+
+            // 3. Save secure URL
+            setFormData(prev => ({ ...prev, hero_image_url: uploadRes.data.secure_url }));
+            toast.success("Asset uploaded successfully");
+        } catch (error) {
+            console.error("Upload error:", error);
+            if (error.response?.data?.detail) {
+                toast.error(`Upload Failed: ${error.response.data.detail}`);
+            } else {
+                toast.error("Cloudinary upload failed. Check keys.");
+            }
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop,
+        accept: { 'image/*': ['.jpeg', '.jpg', '.png', '.webp'] },
+        maxFiles: 1,
+        maxSize: 3 * 1024 * 1024 // 3MB limit
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -341,13 +394,51 @@ const FragranceEditor = ({ fragrance, isOpen, onClose, onSave }) => {
                             </h3>
 
                             <div>
-                                <label className="block text-[#6a6a6a] text-[10px] tracking-[0.2em] uppercase mb-2">Hero Image URL</label>
-                                <input type="text" name="hero_image_url" value={formData.hero_image_url} onChange={handleChange} required
-                                    placeholder="https://... (Cloudinary URL)"
-                                    className="w-full bg-[#111] border border-[#222] px-4 py-3 text-[#e8e8e8] text-sm focus:outline-none focus:border-[#d4c5a0]/50" />
-                            </div>
+                                <label className="block text-[#6a6a6a] text-[10px] tracking-[0.2em] uppercase mb-2">Hero Image</label>
 
-                            {/* Optional: Add Gallery Images Here if needed later */}
+                                {formData.hero_image_url ? (
+                                    <div className="relative w-full h-80 bg-[#111] border border-[#222] flex items-center justify-center overflow-hidden group rounded-sm">
+                                        <img src={formData.hero_image_url} alt="Hero preview" className="object-cover w-full h-full opacity-80 group-hover:opacity-20 transition-opacity duration-300" />
+                                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            <button
+                                                type="button"
+                                                onClick={() => setFormData(prev => ({ ...prev, hero_image_url: '' }))}
+                                                className="bg-[#222] border border-[#333] text-[#e8e8e8] px-6 py-3 text-xs uppercase tracking-widest hover:bg-black hover:text-white transition-colors flex items-center gap-2"
+                                            >
+                                                <Trash2 size={16} /> Remove Asset
+                                            </button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div
+                                        {...getRootProps()}
+                                        className={`w-full h-48 border border-dashed flex flex-col items-center justify-center cursor-pointer transition-all duration-300 rounded-sm ${isDragActive ? 'border-[#d4c5a0] bg-[#d4c5a0]/5 scale-[0.99]' : 'border-[#333] bg-[#111] hover:border-[#555]'}`}
+                                    >
+                                        <input {...getInputProps()} />
+                                        {isUploading ? (
+                                            <div className="flex flex-col items-center gap-4">
+                                                <Loader2 className="animate-spin text-[#d4c5a0]" size={28} />
+                                                <p className="text-[#8a8a8a] text-[10px] uppercase tracking-widest">Encrypting & Uploading...</p>
+                                            </div>
+                                        ) : (
+                                            <div className="flex flex-col items-center gap-4 text-center px-6">
+                                                <div className={`p-3 rounded-full ${isDragActive ? 'bg-[#d4c5a0]/10' : 'bg-[#1a1a1a]'}`}>
+                                                    <Upload className={isDragActive ? "text-[#d4c5a0]" : "text-[#5a5a5a]"} size={20} />
+                                                </div>
+                                                <div>
+                                                    <p className="text-[#e8e8e8] text-xs font-medium mb-1">Drop high-resolution asset here</p>
+                                                    <p className="text-[#6a6a6a] text-[10px] uppercase tracking-widest">or click to browse local files</p>
+                                                </div>
+                                                <div className="flex gap-3 text-[9px] uppercase tracking-widest text-[#4a4a4a]">
+                                                    <span>JPG, PNG, WEBP</span>
+                                                    <span>•</span>
+                                                    <span>Max 3MB</span>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
                         </section>
 
                     </form>

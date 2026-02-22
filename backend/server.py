@@ -66,7 +66,7 @@ async def global_exception_handler(request, exc):
     raise exc
 
 # Import routes
-from routes import admin_routes, product_routes, collection_routes, order_routes, public_routes, checkout_routes
+from routes import admin_routes, product_routes, collection_routes, order_routes, public_routes, checkout_routes, media_routes
 
 # Include routers
 app.include_router(public_routes.router, prefix="/api", tags=["Public"])
@@ -75,6 +75,7 @@ app.include_router(admin_routes.router, prefix="/api/admin", tags=["Admin"])
 app.include_router(product_routes.router, prefix="/api/admin/products", tags=["Products"])
 app.include_router(collection_routes.router, prefix="/api/admin/collections", tags=["Collections"])
 app.include_router(order_routes.router, prefix="/api/admin/orders", tags=["Orders"])
+app.include_router(media_routes.router, prefix="/api/media", tags=["Media"])
 
 
 @app.on_event("startup")
