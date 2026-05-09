@@ -38,25 +38,26 @@ async def lifespan(app: FastAPI):
     from config.database import initialize_database
     await initialize_database()
 
-    if not IS_PRODUCTION:
-        from config.database import admin_users_collection
-        from services.auth_service import get_password_hash
+    from config.database import admin_users_collection
+    from services.auth_service import get_password_hash
 
-        existing_admin = await admin_users_collection.find_one({"email": "admin@arar-perfume.com"})
-        if not existing_admin:
-            default_admin = {
-                "id": "default-admin",
-                "email": "admin@arar-perfume.com",
-                "full_name": "ARAR Admin",
-                "role": "admin",
-                "is_active": True,
-                "hashed_password": get_password_hash("ArarAdmin2024!"),
-                "created_at": None
-            }
-            await admin_users_collection.insert_one(default_admin)
-            logger.info("Default admin user created: admin@arar-perfume.com (dev only)")
-    else:
-        logger.info("Production mode: Default admin seeding disabled.")
+    seed_email = os.environ.get("ADMIN_EMAIL", "admin@arar-perfume.com")
+    seed_password = os.environ.get("ADMIN_PASSWORD", "ArarAdmin2024!")
+    seed_name = os.environ.get("ADMIN_NAME", "ARAR Admin")
+
+    existing_admin = await admin_users_collection.find_one({"email": seed_email})
+    if not existing_admin:
+        default_admin = {
+            "id": "default-admin",
+            "email": seed_email,
+            "full_name": seed_name,
+            "role": "admin",
+            "is_active": True,
+            "hashed_password": get_password_hash(seed_password),
+            "created_at": None
+        }
+        await admin_users_collection.insert_one(default_admin)
+        logger.info("Admin user seeded: %s", seed_email)
 
     yield
 
