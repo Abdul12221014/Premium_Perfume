@@ -1,6 +1,7 @@
 import os
 import logging
 import sys
+from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +25,7 @@ _ALIASES: dict = {
 }
 
 
-def _resolve(var: str) -> str | None:
+def _resolve(var: str) -> Optional[str]:
     """Return the value of var or any of its aliases, or None if none set."""
     val = os.environ.get(var)
     if val:

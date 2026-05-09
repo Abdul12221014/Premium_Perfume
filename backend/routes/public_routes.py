@@ -1,16 +1,12 @@
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, EmailStr, Field
 from config.database import products_collection, newsletter_collection, contact_inquiries_collection
+from config.limiter import limiter
 from typing import List
 import uuid
 from datetime import datetime, timezone
 
 router = APIRouter()
-
-
-def _get_limiter():
-    from server import limiter
-    return limiter
 
 
 class NewsletterSubscribe(BaseModel):
@@ -54,7 +50,7 @@ async def get_fragrance_by_slug(slug: str):
 
 
 @router.post("/newsletter")
-@_get_limiter().limit("3/minute")
+@limiter.limit("3/minute")
 async def subscribe_newsletter(request: Request, data: NewsletterSubscribe):
     """Newsletter subscription — rate limited to 3 per minute per IP"""
     existing = await newsletter_collection.find_one({"email": data.email})
@@ -71,7 +67,7 @@ async def subscribe_newsletter(request: Request, data: NewsletterSubscribe):
 
 
 @router.post("/contact")
-@_get_limiter().limit("5/minute")
+@limiter.limit("5/minute")
 async def create_contact_inquiry(request: Request, data: ContactInquiry):
     """Contact form submission — rate limited to 5 per minute per IP"""
     inquiry = {

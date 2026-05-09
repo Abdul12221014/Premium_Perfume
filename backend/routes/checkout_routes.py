@@ -2,6 +2,8 @@ from fastapi import APIRouter, HTTPException, Request, Response, status as http_
 import stripe
 from pydantic import BaseModel, field_validator
 from config.database import products_collection, orders_collection
+from config.limiter import limiter
+from typing import List
 import os
 from datetime import datetime, timezone
 from urllib.parse import urlparse
@@ -11,16 +13,11 @@ import logging
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
-
-def _get_limiter():
-    from server import limiter
-    return limiter
-
 STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY', os.environ.get('STRIPE_SECRET_KEY'))
 STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET')
 
 # Allowed origins for checkout redirects — prevents open redirect attacks
-def _get_allowed_origins() -> list[str]:
+def _get_allowed_origins() -> List[str]:
     raw = os.environ.get('CORS_ORIGIN', '')
     return [o.strip().rstrip('/') for o in raw.split(',') if o.strip()]
 
@@ -62,7 +59,7 @@ class CheckoutStatusRequest(BaseModel):
 
 
 @router.post("/create-checkout-session")
-@_get_limiter().limit("10/minute")
+@limiter.limit("10/minute")
 async def create_checkout_session(request: Request, data: CheckoutRequest):
     # Validate origin before any Stripe calls
     origin_url = _validate_origin_url(data.origin_url)

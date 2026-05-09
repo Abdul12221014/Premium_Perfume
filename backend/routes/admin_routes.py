@@ -3,15 +3,11 @@ from models.admin import AdminUserCreate, AdminUserLogin, Token, AdminUser
 from services.auth_service import verify_password, create_access_token, get_password_hash
 from middleware.auth_middleware import get_current_admin
 from config.database import admin_users_collection
+from config.limiter import limiter
 from datetime import timedelta
 import uuid
 
 router = APIRouter()
-
-
-def _get_limiter():
-    from server import limiter
-    return limiter
 
 
 @router.post("/register", response_model=dict)
@@ -31,7 +27,7 @@ async def register_admin(user: AdminUserCreate, current_admin: dict = Depends(ge
 
 
 @router.post("/login", response_model=Token)
-@_get_limiter().limit("5/minute")
+@limiter.limit("5/minute")
 async def login_admin(request: Request, credentials: AdminUserLogin):
     """Admin login — rate limited to 5 attempts per minute per IP"""
     admin = await admin_users_collection.find_one({"email": credentials.email}, {"_id": 0})
