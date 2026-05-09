@@ -1,5 +1,5 @@
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, EmailStr
+from fastapi import APIRouter, HTTPException, Request
+from pydantic import BaseModel, EmailStr, Field
 from config.database import products_collection, newsletter_collection, contact_inquiries_collection
 from typing import List
 import uuid
@@ -8,14 +8,19 @@ from datetime import datetime, timezone
 router = APIRouter()
 
 
+def _get_limiter():
+    from server import limiter
+    return limiter
+
+
 class NewsletterSubscribe(BaseModel):
     email: EmailStr
 
 
 class ContactInquiry(BaseModel):
-    name: str
+    name: str = Field(..., min_length=1, max_length=100)
     email: EmailStr
-    message: str
+    message: str = Field(..., min_length=1, max_length=4000)
 
 
 @router.get("/")
@@ -36,6 +41,9 @@ async def get_published_fragrances():
 @router.get("/fragrances/{slug}")
 async def get_fragrance_by_slug(slug: str):
     """Get single fragrance by slug"""
+    if not slug or len(slug) > 200:
+        raise HTTPException(status_code=400, detail="Invalid slug")
+
     fragrance = await products_collection.find_one(
         {"slug": slug, "status": "published"},
         {"_id": 0}
@@ -46,12 +54,13 @@ async def get_fragrance_by_slug(slug: str):
 
 
 @router.post("/newsletter")
-async def subscribe_newsletter(data: NewsletterSubscribe):
-    """Newsletter subscription"""
+@_get_limiter().limit("3/minute")
+async def subscribe_newsletter(request: Request, data: NewsletterSubscribe):
+    """Newsletter subscription — rate limited to 3 per minute per IP"""
     existing = await newsletter_collection.find_one({"email": data.email})
     if existing:
         raise HTTPException(status_code=400, detail="Email already subscribed")
-    
+
     subscription = {
         "id": str(uuid.uuid4()),
         "email": data.email,
@@ -62,8 +71,9 @@ async def subscribe_newsletter(data: NewsletterSubscribe):
 
 
 @router.post("/contact")
-async def create_contact_inquiry(data: ContactInquiry):
-    """Contact form submission"""
+@_get_limiter().limit("5/minute")
+async def create_contact_inquiry(request: Request, data: ContactInquiry):
+    """Contact form submission — rate limited to 5 per minute per IP"""
     inquiry = {
         "id": str(uuid.uuid4()),
         "name": data.name,

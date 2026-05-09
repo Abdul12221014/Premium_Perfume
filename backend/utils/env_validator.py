@@ -8,13 +8,33 @@ REQUIRED_ENV_VARS = [
     "ENVIRONMENT",
     "MONGO_URL",
     "DB_NAME",
-    "STRIPE_SECRET_KEY",
+    "STRIPE_SECRET_KEY",     # alias: STRIPE_API_KEY
     "STRIPE_WEBHOOK_SECRET",
-    # Aliases supported: DATABASE_URL, JWT_SECRET
+    "JWT_SECRET_KEY",        # alias: JWT_SECRET
     "CLOUDINARY_CLOUD_NAME",
     "CLOUDINARY_API_KEY",
     "CLOUDINARY_API_SECRET",
 ]
+
+# Maps canonical name → list of accepted aliases
+_ALIASES: dict = {
+    "STRIPE_SECRET_KEY": ["STRIPE_API_KEY"],
+    "MONGO_URL": ["DATABASE_URL"],
+    "JWT_SECRET_KEY": ["JWT_SECRET"],
+}
+
+
+def _resolve(var: str) -> str | None:
+    """Return the value of var or any of its aliases, or None if none set."""
+    val = os.environ.get(var)
+    if val:
+        return val
+    for alias in _ALIASES.get(var, []):
+        val = os.environ.get(alias)
+        if val:
+            return val
+    return None
+
 
 def validate_env():
     """
@@ -23,22 +43,15 @@ def validate_env():
     """
     env_mode = os.environ.get("ENVIRONMENT", "").lower()
     if env_mode not in ["development", "staging", "production"]:
-        print(f"\nFATAL: ENVIRONMENT variable must be set to 'development', 'staging', or 'production'. Current: '{env_mode}'")
+        print(f"\nFATAL: ENVIRONMENT must be 'development', 'staging', or 'production'. Got: '{env_mode}'")
         sys.exit(1)
 
     missing = []
     for var in REQUIRED_ENV_VARS:
-        if not os.environ.get(var):
-            # Check for aliases
-            if var == "STRIPE_SECRET_KEY" and os.environ.get("STRIPE_API_KEY"):
-                continue
-            if var == "MONGO_URL" and os.environ.get("DATABASE_URL"):
-                continue
-            if var == "JWT_SECRET_KEY" and os.environ.get("JWT_SECRET"):
-                continue
+        if not _resolve(var):
             missing.append(var)
-    
-    # In production, CORS_ORIGIN is mandatory
+
+    # CORS_ORIGIN is mandatory in production
     cors_origin = os.environ.get("CORS_ORIGIN")
     if env_mode == "production" and not cors_origin:
         missing.append("CORS_ORIGIN")
@@ -46,40 +59,40 @@ def validate_env():
     if missing:
         print(f"\nFATAL: Missing required environment variables for {env_mode} mode:")
         for var in missing:
-            print(f"  - {var}")
+            aliases = _ALIASES.get(var, [])
+            note = f" (or {', '.join(aliases)})" if aliases else ""
+            print(f"  - {var}{note}")
         sys.exit(1)
 
     # Stripe Mode Guard
-    stripe_key = os.environ.get("STRIPE_SECRET_KEY", os.environ.get("STRIPE_API_KEY", ""))
+    stripe_key = _resolve("STRIPE_SECRET_KEY") or ""
     stripe_mode = "Unknown"
-    
+
     if env_mode == "production":
         if not stripe_key.startswith("sk_live_"):
-            print(f"\nFATAL: Production mode detected but STRIPE_SECRET_KEY does not start with 'sk_live_'.")
+            print("\nFATAL: Production mode but STRIPE_SECRET_KEY does not start with 'sk_live_'.")
             sys.exit(1)
         stripe_mode = "LIVE"
     else:
-        if not stripe_key.startswith("sk_test_"):
-            print(f"\nWARNING: {env_mode} mode detected but STRIPE_SECRET_KEY does not start with 'sk_test_'.")
+        if stripe_key and not stripe_key.startswith("sk_test_"):
+            print(f"\nWARNING: {env_mode} mode but STRIPE_SECRET_KEY does not start with 'sk_test_'.")
         stripe_mode = "TEST"
 
-    # CORS Guard
+    # CORS wildcard guard
     if env_mode == "production" and cors_origin == "*":
         print("\nFATAL: Wildcard CORS_ORIGIN ('*') is forbidden in production.")
         sys.exit(1)
 
-    # Database Validation Placeholder (Connectivity check is in startup_event)
     db_name = os.environ.get("DB_NAME")
 
-    # Final Validation Summary
-    print("\n" + "="*40)
-    print("🚀 ARAR PERFUME STARTUP VALIDATION")
-    print("="*40)
+    print("\n" + "=" * 40)
+    print("ARAR PERFUME STARTUP VALIDATION")
+    print("=" * 40)
     print(f"Environment:             {env_mode.upper()}")
     print(f"Stripe Mode:             {stripe_mode}")
-    print(f"CORS Origin:             {cors_origin or 'Not set'}")
+    print(f"CORS Origin:             {cors_origin or 'Not set (wildcard in dev)'}")
     print(f"Database:                {db_name}")
-    print(f"Webhook Validation:      ACTIVE (STRIPE_WEBHOOK_SECRET present)")
-    print("="*40 + "\n")
+    print(f"Webhook Validation:      ACTIVE")
+    print("=" * 40 + "\n")
 
-    logger.info(f"Environment validation successful ({env_mode}).")
+    logger.info("Environment validation successful (%s).", env_mode)

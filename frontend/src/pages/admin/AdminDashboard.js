@@ -139,7 +139,7 @@ const AdminDashboard = () => {
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
             <span className="text-[#5a5a5a]">Environment</span>
-            <span className="text-[#7a7a7a]">Production</span>
+            <span className="text-[#7a7a7a]">{process.env.REACT_APP_ENV || process.env.NODE_ENV || "unknown"}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-[#5a5a5a]">API Version</span>

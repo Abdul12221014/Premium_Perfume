@@ -116,3 +116,4 @@ watchfiles
 websockets
 yarl
 zipp
+slowapi
